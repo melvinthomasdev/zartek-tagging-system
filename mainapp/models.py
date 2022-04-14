@@ -41,3 +41,16 @@ class PostTag(models.Model):
 
     def __str__(self):
         return self.tag.text
+
+
+class Vote(models.Model):
+    VOTE_CHOICES = (
+        (1, "Like"),
+        (-1, "Disike"),
+    )
+    user = models.ForeignKey(User, related_name='vote',  on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='vote', on_delete=models.CASCADE)
+    vote = models.IntegerField(choices=VOTE_CHOICES, blank=False)
+
+    class Meta:
+        unique_together = ('user', 'post')

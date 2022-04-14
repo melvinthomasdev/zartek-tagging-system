@@ -3,7 +3,7 @@ from pyexpat import model
 from statistics import mode
 from django.contrib import admin
 
-from mainapp.models import Profile, Post, PostImage, Tag, PostTag
+from mainapp.models import Profile, Post, PostImage, Tag, PostTag, Vote
 
 
 class PostImageAdmin(admin.StackedInline):
@@ -28,3 +28,4 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Post,PostAdmin)
 admin.site.register(Profile)
 admin.site.register(Tag)
+admin.site.register(Vote)
