@@ -1,3 +1,4 @@
+from cgitb import reset
 from email.policy import default
 from hashlib import blake2b
 from pyexpat import model
@@ -17,6 +18,23 @@ class Post(models.Model):
 
     def __str__(self):
         return ("Post Object("+str(self.id)+")->"+self.title)
+    
+    @property
+    def liked_users(self):
+        result = []
+        likes = Vote.objects.filter(post=self, vote=1)
+        for like in likes:
+            result.append(like.user)
+        return result
+    
+    @property
+    def disliked_users(self):
+        result = []
+        likes = Vote.objects.filter(post=self, vote=-1)
+        for like in likes:
+            result.append(like.user)
+        return result
+
 
 class PostImage(models.Model):
     post = models.ForeignKey(Post, related_name='postimage', on_delete=models.CASCADE)

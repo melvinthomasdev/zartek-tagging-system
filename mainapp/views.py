@@ -81,5 +81,16 @@ class VotePostview(APIView):
 
 @api_view(['GET', ])
 def index_view(request):
-    k = get_user_reccommendations(request.user)
-    return Response(k, status=status.HTTP_200_OK)
+    data={}
+    queryset = get_user_reccommendations(request.user)
+    print(len(queryset))
+    for i in queryset:
+        print(i)
+    for post in Post.objects.all():
+        if request.user not in post.disliked_users:
+            post = PostSerializer(post).data
+            if post not in queryset:
+                queryset.append(post)
+    data['length'] = len(queryset)
+    data['posts'] = queryset
+    return Response(data, status=status.HTTP_200_OK)

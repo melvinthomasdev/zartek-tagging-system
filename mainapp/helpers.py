@@ -10,7 +10,6 @@ from .models import Tag, Vote, PostTag, Post
 def get_user_reccommendations(user):
     rec = []
     tag_weights = {}
-    final_dict = {}
     posts = []
     votes = Vote.objects.filter(user=user)
     for vote in votes:
@@ -29,11 +28,9 @@ def get_user_reccommendations(user):
             post_tags = PostTag.objects.filter(tag=tag_obj)
             for post_tag in post_tags:
                 posts.append(PostSerializer(post_tag.post).data)
-                
     for post in posts:
             if post not in rec:
                 rec.append(post)
-    final_dict["length"] = len(rec)
-    final_dict["posts"] = rec
-    return final_dict
+                
+    return rec  
 
