@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .serializers import PostSerializer, ImageSerializer, UserSerializer
 from .models import Post, PostImage, Vote
+from .helpers import get_user_reccommendations
 
 # Create your views here.
 
@@ -77,3 +78,8 @@ class VotePostview(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+@api_view(['GET', ])
+def index_view(request):
+    k = get_user_reccommendations(request.user)
+    return Response(k, status=status.HTTP_200_OK)

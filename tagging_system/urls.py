@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from mainapp.views import create_user_view, VotePostview
+from mainapp.views import create_user_view, VotePostview, index_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register', create_user_view),
     path('vote/<int:id>', VotePostview.as_view()),
+    path('', index_view),
 ]

@@ -35,3 +35,13 @@ class PostSerializer(serializers.Serializer):
     def create(self, validated_data):
         Post.objects.create(**validated_data)
 
+
+class TagSerializer(serializers.Serializer):
+    text = serializers.CharField(max_length=15)
+
+class PostTagSerializer(serializers.Serializer):
+    post = PostSerializer()
+    tag = TagSerializer()
+    weight = serializers.IntegerField()
+
+

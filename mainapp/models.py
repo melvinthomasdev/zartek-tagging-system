@@ -16,7 +16,7 @@ class Post(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return ("Post Object("+str(self.id)+")->"+self.title)
 
 class PostImage(models.Model):
     post = models.ForeignKey(Post, related_name='postimage', on_delete=models.CASCADE)
