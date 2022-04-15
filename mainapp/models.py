@@ -5,14 +5,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    likes = models.JSONField(default=dict, blank=True, null=True)
-    dislikes = models.JSONField(default=dict, blank=True, null=True)
-
-    def __str__(self):
-        return self.user.username
+VOTE_CHOICES = (
+        (1, "Like"),
+        (-1, "Disike"),
+    )
 
 
 class Post(models.Model):
@@ -44,10 +40,6 @@ class PostTag(models.Model):
 
 
 class Vote(models.Model):
-    VOTE_CHOICES = (
-        (1, "Like"),
-        (-1, "Disike"),
-    )
     user = models.ForeignKey(User, related_name='vote',  on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='vote', on_delete=models.CASCADE)
     vote = models.IntegerField(choices=VOTE_CHOICES, blank=False)
