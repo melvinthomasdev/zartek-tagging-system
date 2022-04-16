@@ -1,3 +1,4 @@
+from asyncio import proactor_events
 from cgitb import reset
 from email.policy import default
 from hashlib import blake2b
@@ -34,6 +35,14 @@ class Post(models.Model):
         for like in likes:
             result.append(like.user)
         return result
+    
+    @property
+    def number_of_likes(self):
+        return len(self.liked_users)
+
+    @property
+    def number_of_dislikes(self):
+        return len(self.disliked_users)
 
 
 class PostImage(models.Model):

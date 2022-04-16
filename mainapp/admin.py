@@ -21,6 +21,7 @@ class PostTagAdmin(admin.StackedInline):
 
 class PostAdmin(admin.ModelAdmin):
     inlines = [PostImageAdmin, PostTagAdmin ]
+    list_display = ['title', 'description', 'number_of_likes', 'number_of_dislikes']
 
     class Meta:
         model = Post
