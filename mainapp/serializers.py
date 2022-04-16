@@ -14,7 +14,6 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
     password = serializers.CharField(max_length=128, trim_whitespace=False, write_only=True)
     date_joined = serializers.DateTimeField(read_only=True)
-    last_login = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         User.objects.create(**validated_data)

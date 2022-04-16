@@ -6,7 +6,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.pagination import LimitOffsetPagination
 
 from .serializers import PostSerializer, UserSerializer
@@ -81,7 +81,9 @@ class VotePostview(APIView):
         )
 
 class IndexView(APIView, LimitOffsetPagination):
+
     permission_classes = (IsAuthenticated, )
+
     def get(self, request):
         data = get_user_reccommendations(request.user)
         for post in Post.objects.all():
@@ -93,4 +95,20 @@ class IndexView(APIView, LimitOffsetPagination):
         return self.get_paginated_response(serializer.data)
 
 
+class GetLikedUsers(APIView, LimitOffsetPagination):
 
+    permission_classes = (IsAdminUser, )
+
+    def get(self, request, id):
+        try:
+            post = Post.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return Response(
+                {
+                    "message": "post Not Found"
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        page = self.paginate_queryset(post.liked_users, request)
+        serializer = UserSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
