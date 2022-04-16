@@ -1,15 +1,16 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-from django.shortcuts import render
 
 from rest_framework import status
-from  rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.pagination import LimitOffsetPagination
 
-from .serializers import PostSerializer, ImageSerializer, UserSerializer
-from .models import Post, PostImage, Vote
+from .serializers import PostSerializer, UserSerializer
+from .models import Post, Vote
 from .helpers import get_user_reccommendations
 
 # Create your views here.
@@ -79,18 +80,17 @@ class VotePostview(APIView):
             status=status.HTTP_200_OK
         )
 
-@api_view(['GET', ])
-def index_view(request):
-    data={}
-    queryset = get_user_reccommendations(request.user)
-    print(len(queryset))
-    for i in queryset:
-        print(i)
-    for post in Post.objects.all():
-        if request.user not in post.disliked_users:
-            post = PostSerializer(post).data
-            if post not in queryset:
-                queryset.append(post)
-    data['length'] = len(queryset)
-    data['posts'] = queryset
-    return Response(data, status=status.HTTP_200_OK)
+class IndexView(APIView, LimitOffsetPagination):
+    permission_classes = (IsAuthenticated, )
+    def get(self, request):
+        data = get_user_reccommendations(request.user)
+        for post in Post.objects.all():
+            if request.user not in post.disliked_users:
+                if post not in data:
+                    data.append(post)
+        page = self.paginate_queryset(data, request)
+        serializer = PostSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+
+

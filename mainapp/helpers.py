@@ -27,10 +27,10 @@ def get_user_reccommendations(user):
             tag_obj = Tag.objects.get(text=tag)
             post_tags = PostTag.objects.filter(tag=tag_obj)
             for post_tag in post_tags:
-                posts.append(PostSerializer(post_tag.post).data)
+                posts.append(post_tag.post)
     for post in posts:
             if post not in rec:
                 rec.append(post)
-                
+
     return rec  
 
