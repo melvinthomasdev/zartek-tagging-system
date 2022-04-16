@@ -28,6 +28,7 @@ class ImageSerializer(serializers.Serializer):
 
 
 class PostSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     title = serializers.CharField(max_length=30)
     description = serializers.CharField(max_length=15)
     postimage = ImageSerializer(read_only=True, many=True)
