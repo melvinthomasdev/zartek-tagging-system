@@ -21,7 +21,7 @@ from mainapp.views import create_user_view, VotePostview, IndexView, GetLikedUse
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register', create_user_view),
-    path('vote/<int:id>', VotePostview.as_view()),
-    path('likes/<int:id>', GetLikedUsers.as_view()),
-    path('', IndexView.as_view()),
+    path('posts/<int:id>/vote', VotePostview.as_view()),
+    path('posts/<int:id>/likes', GetLikedUsers.as_view()),
+    path('posts', IndexView.as_view()),
 ]
