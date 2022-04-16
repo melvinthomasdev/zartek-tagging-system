@@ -1,8 +1,5 @@
-from asyncio import proactor_events
-from cgitb import reset
-from email.policy import default
-from hashlib import blake2b
-from pyexpat import model
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -16,6 +13,7 @@ VOTE_CHOICES = (
 class Post(models.Model):
     title = models.CharField(max_length=30)
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
         return ("Post Object("+str(self.id)+")->"+self.title)

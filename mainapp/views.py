@@ -89,7 +89,7 @@ class IndexView(APIView, LimitOffsetPagination):
                 if post not in data:
                     data.append(post)
         page = self.paginate_queryset(data, request)
-        serializer = PostSerializer(page, many=True)
+        serializer = PostSerializer(page, many=True, context={"user": request.user})
         return self.get_paginated_response(serializer.data)
 
 
